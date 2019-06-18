@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Word-Guess</title>
+</head>
+
+<body>
+    <div>
+        <p id="directions-text">Press any key to get started!</p>
+        <div id="display-word">
+            <p id="display-letters"></p>
+        </div>
+        <p id="wins"></p>
+        <p id="guesses-remain"></p>
+        <p id="letter-guessed"></p>
+    </div>
+
+    <script type="text/javascript">
+
+        var win = 0;
+        var game = new wordGuess();
+        var limit = 12;
+
+        var directionText = document.getElementById("directions-text");
+        var displayWord = document.getElementById("display-word");
+        var displayLetters = document.getElementById("display-letters");
+        var displayWin = document.getElementById("wins");
+        var guessesRemain = document.getElementById("guesses-remain");
+        var letterGuessed = document.getElementById("letter-guessed");
+
+        displayWin.textContent = "Win: " + win;
+        guessesRemain.textContent = "Tries Remain: " + limit;
+        document.onkeyup = function (event) {
+            var userGuess = event.key;
+
+            if (!game.gameOver) {
+                if (!guessedLetter.includes(userGuess)) {
+                    checkGuess(userGuess);
+                }
+            } else {
+                game = new wordGuess();
+
+            }
+        }
+
+        function wordGuess() {
+            wordBank = ["Daenerys",
+                "Aegon",
+                "Targaryen",
+                "Jon",
+                "Robb",
+                "Ned",
+                "Catelyn",
+                "Bran",
+                "Arya",
+                "Sansa",
+                "Stark",
+                "Tyrion",
+                "Jaime",
+                "Cersie",
+                "Lannister",
+                "Renly",
+                "Robert",
+                "Stannis",
+                "Baratheon"];
+            // randomly select a word in the word bank
+            wordChoice = wordBank[Math.floor(Math.random() * wordBank.length)];
+            guessedLetter = [];
+            correctGuessed = [];
+            gameOver = false;
+            wrong = 0;
+            for (var i = 0; i < wordChoice.length; i++) {
+                correctGuessed[i] = (false);
+            }
+        }
+        // check the user guesses
+        function checkGuess(userGuess) {
+            var isInWord = false;
+            guessedLetter.push(userGuess);
+
+            //iterate through every single letter in the word, if the guess letter included in the word choice
+            // then return true, and correct guess return true,
+            for (var i = 0; i < wordChoice.length; i++) {
+                if (wordChoice.charAt(i) === userGuess) {
+                    isInWord = true;
+                    correctGuessed[i] = true;
+                }
+            }
+            //if the guessed letter is not include in the word, increment the wrong count
+            if (isInWord != true) {
+                wrong++;
+            }
+
+            //if wrong is more than 0, update limit by reduce the wrong number
+            if (wrong >= limit) {
+                limit = limit - wrong;
+                return limit;
+            }
+
+            if (wrong = limit) {
+                gameOver = true;
+            }
+
+            //replace letters with underscores
+            function displayHidden() {
+                var hiddenLetter = "";
+                // iterate through the correct guess, if the correct guess include or the game is over,
+                //display the letter
+                //if not, replace the letter with an underscore
+                for (var i = 0; i < correctGuessed.length; i++) {
+                    
+                    if (correctGuessed[i] || gameOver) {
+                        hiddenLetter += wordChoice.charAt(i);
+                    } else {
+                        hiddenLetter += "_";
+                    }
+                    if (i < (correctGuessed.length - 1)) hiddenLetter += "_";
+                }
+                displayLetters.textContent = hiddenLetter;
+            }
+            displayHidden();
+
+            //display letter guessed
+            function displayGuessedLetter() {
+                var temp = "";
+                for (var i = 0; i < guessedLetter.length; i++) {
+                     temp += (guessedLetters[i]);
+                   if (i < (guessedLetters.length - 1)) temp+= " ";
+                 }
+                letterGuessed.textContent = temp;
+            }
+            displayGuessedLetter();
+
+
+
+        }
+    </script>
+
+</body>
+
+</html>
